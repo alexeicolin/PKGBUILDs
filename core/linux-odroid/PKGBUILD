@@ -4,7 +4,7 @@
 buildarch=4
 
 pkgbase=linux-odroid
-pkgname=('linux-odroid-x' 'linux-odroid-x2' 'linux-odroid-u2' 'linux-headers-odroid')
+pkgname=('linux-odroid-u2' 'linux-headers-odroid')
 _kernelname=${pkgname#linux}
 _basekernel=3.8
 pkgver=${_basekernel}.13.28
@@ -12,6 +12,7 @@ pkgrel=4
 arch=('armv7h')
 url="http://github.com/hardkernel/linux/"
 license=('GPL2')
+groups=('customized')
 makedepends=('xmlto' 'docbook-xsl' 'kmod' 'git' 'inetutils' 'bc' 'uboot-tools')
 options=('!strip')
 _commit=3bcdf52287dbfa82643a8f59dc32c14fed2587b0
