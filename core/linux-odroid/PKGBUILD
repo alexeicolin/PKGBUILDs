@@ -20,11 +20,13 @@ source=("https://github.com/hardkernel/linux/archive/${_commit}.tar.gz"
         'config_x'
         'config_x2'
         'config_u2'
+        'config_u2_lean'
         'linux-odroid.preset')
 md5sums=('535dc7f921ae5c4618c2ab8de535c166'
          'd62dbed886fb95750031d4ab577c4739'
          '4ee9bbb8bf22b078ffcb6d5d60f9d431'
          'e2e88e5c82e509d13287d45f78a6caeb'
+         'aa39c95e604add0e6175ff0f9c43a20b'
          'f4b60c38c4930d40bf025e50d3ec45d3')
 
 # Kernel and initrd images go here
@@ -127,7 +129,7 @@ package_linux-odroid-u2() {
   backup=("etc/mkinitcpio.d/${pkgbase}.preset")
   install=${pkgbase}.install
 
-  build_kernel_package config_u2
+  build_kernel_package config_u2_lean
 }
 
 package_linux-headers-odroid() {
