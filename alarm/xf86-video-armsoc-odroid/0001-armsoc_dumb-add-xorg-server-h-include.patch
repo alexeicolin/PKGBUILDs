@@ -1,0 +1,26 @@
+From 8c77986d28ffeaf643a97ead20c103c67030039b Mon Sep 17 00:00:00 2001
+From: Alexei Colin <ac@alexeicolin.com>
+Date: Sun, 11 Jan 2015 18:02:53 -0500
+Subject: [PATCH] armsoc_dumb: add xorg-server.h include
+
+Otherwise it fails with a syntax error in xorg/os.h due to
+HAVE_STRNDUP not being defined (probably).
+---
+ src/armsoc_dumb.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/armsoc_dumb.c b/src/armsoc_dumb.c
+index 8f29b7a..879d77c 100644
+--- a/src/armsoc_dumb.c
++++ b/src/armsoc_dumb.c
+@@ -27,6 +27,7 @@
+ #include <errno.h>
+ #include <unistd.h>
+ 
++#include <xorg-server.h>
+ #include <xf86.h>
+ #include <xf86drm.h>
+ #include <xf86drmMode.h>
+-- 
+2.2.1
+

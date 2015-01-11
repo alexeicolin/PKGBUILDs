@@ -14,8 +14,15 @@ makedepends=('git' 'pkgconfig' 'xorg-server-devel' 'resourceproto' 'scrnsaverpro
 options=('!libtool')
 conflicts=(xf86-video-armsoc)
 provides=(xf86-video-armsoc)
-source=("$pkgname::git+https://github.com/mdrjr/xf86-video-armsoc.git#commit=${_commit}")
-md5sums=('SKIP')
+source=("$pkgname::git+https://github.com/mdrjr/xf86-video-armsoc.git#commit=${_commit}"
+	'0001-armsoc_dumb-add-xorg-server-h-include.patch')
+md5sums=('SKIP'
+	'80d12ba0d15da80a0c03beae2f93e03c')
+
+prepare() {
+  cd $pkgname
+  patch -p1 < ${startdir}/0001-armsoc_dumb-add-xorg-server-h-include.patch
+}
 
 pkgver() {
   cd $pkgname
