@@ -21,13 +21,15 @@ source=("https://github.com/hardkernel/linux/archive/${_commit}.tar.gz"
         'config_x2'
         'config_u2'
         'config_u2_lean'
-        'linux-odroid.preset')
+        'linux-odroid.preset'
+        'arch-logo.ppm')
 md5sums=('535dc7f921ae5c4618c2ab8de535c166'
          'd62dbed886fb95750031d4ab577c4739'
          '4ee9bbb8bf22b078ffcb6d5d60f9d431'
          'e2e88e5c82e509d13287d45f78a6caeb'
          'aa39c95e604add0e6175ff0f9c43a20b'
-         'f4b60c38c4930d40bf025e50d3ec45d3')
+         'f4b60c38c4930d40bf025e50d3ec45d3'
+         'de302b1a6bc612f6eb95714341003ac0')
 
 # Kernel and initrd images go here
 _bootdir=/boot
@@ -47,6 +49,8 @@ build_kernel_package() {
 
   cd "${srcdir}/linux-${_commit}"
   cat "${srcdir}/$config" > ./.config
+
+  install -m644 ${startdir}/arch-logo.ppm drivers/video/logo/logo_linux_clut224.ppm
 
   make ${MAKEFLAGS} zImage modules
   
