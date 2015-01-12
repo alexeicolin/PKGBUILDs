@@ -1,0 +1,39 @@
+From 522362f4d4a5063494c63872f70983b72eee8f57 Mon Sep 17 00:00:00 2001
+From: Alexei Colin <ac@alexeicolin.com>
+Date: Sun, 11 Jan 2015 22:23:16 -0500
+Subject: [PATCH] armsoc_driver: do not Attend/Ignore gone clients
+
+This fixes segfault in IgnoreClient in Xserver called by
+LeaveVT handler in armsoc driver. This was observed
+when running 'awesome' window manager, which creates
+two connections, one of which is used to set wallpaper
+and closed quickly (and becomes a 'gone' client).
+---
+ src/armsoc_driver.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/armsoc_driver.c b/src/armsoc_driver.c
+index 7e70f34..1c41ac5 100644
+--- a/src/armsoc_driver.c
++++ b/src/armsoc_driver.c
+@@ -1335,7 +1335,7 @@ ARMSOCEnterVT(VT_FUNC_ARGS_DECL)
+ 	TRACE_ENTER();
+ 
+ 	for (i = 1; i < currentMaxClients; i++) {
+-		if (clients[i])
++		if (clients[i] && !clients[i]->clientGone)
+ 			AttendClient(clients[i]);
+ 	}
+ 
+@@ -1370,7 +1370,7 @@ ARMSOCLeaveVT(VT_FUNC_ARGS_DECL)
+ 	TRACE_ENTER();
+ 
+ 	for (i = 1; i < currentMaxClients; i++) {
+-		if (clients[i])
++		if (clients[i] && !clients[i]->clientGone)
+ 			IgnoreClient(clients[i]);
+ 	}
+ 
+-- 
+2.2.1
+

@@ -5,9 +5,10 @@
 buildarch=4
 
 pkgname=xf86-video-armsoc-git
-_commit=f16b5c842ffd6f80a3091fc893bc2de8162bc49b
-pkgver=219.f16b5c8
-pkgrel=2
+#_commit=f16b5c842ffd6f80a3091fc893bc2de8162bc49b
+_commit=459fcb44e1782facfc7954a7e276e1492a3f312b
+pkgver=234.459fcb4
+pkgrel=1
 epoch=1
 arch=('armv7h')
 url="http://cgit.freedesktop.org/xorg/driver/xf86-video-armsoc"
@@ -16,8 +17,15 @@ makedepends=('git' 'pkgconfig' 'xorg-server-devel' 'resourceproto' 'scrnsaverpro
 options=('!libtool')
 conflicts=(xf86-video-armsoc)
 provides=(xf86-video-armsoc)
-source=("$pkgname::git://anongit.freedesktop.org/xorg/driver/xf86-video-armsoc#commit=${_commit}")
-md5sums=('SKIP')
+source=("$pkgname::git://anongit.freedesktop.org/xorg/driver/xf86-video-armsoc#commit=${_commit}"
+	'0001-armsoc_driver-do-not-Attend-Ignore-gone-clients.patch')
+md5sums=('SKIP'
+	'c6c6a3d5c23eb82685f13306644e0171')
+
+prepare() {
+  cd $pkgname
+  patch -p1 < ${startdir}/0001-armsoc_driver-do-not-Attend-Ignore-gone-clients.patch
+}
 
 pkgver() {
   cd $pkgname
