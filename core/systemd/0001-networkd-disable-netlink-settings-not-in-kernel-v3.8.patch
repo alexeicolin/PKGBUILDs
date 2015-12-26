@@ -1,0 +1,47 @@
+commit 29e4cb33d6087748132e6b63328fd9f040d8f471
+Author: Alexei Colin <ac@alexeicolin.com>
+Date:   Fri Dec 25 22:49:33 2015 -0500
+
+    networkd: disable netlink settings not in kernel v3.8
+    
+    Without this patch on kernel v3.8 the systemd-networkd service fails to
+    bring up the interface with 'Operation not supported' error and if that
+    is fixed (by the networkd-link.c part of this patch), fails to add the
+    default route with 'Invalid argument' error.
+
+diff --git a/src/network/networkd-link.c b/src/network/networkd-link.c
+index 88a761f..889e286 100644
+--- a/src/network/networkd-link.c
++++ b/src/network/networkd-link.c
+@@ -1395,6 +1395,7 @@ static int link_up(Link *link) {
+         if (r < 0)
+                 return log_link_error_errno(link, r, "Could not open IFLA_AF_SPEC container: %m");
+ 
++#if 0 // IFLA_INET6_TOKEN, IFLA_INET6_ADDR_GEN_MODE are not in kernel 3.8
+         if (socket_ipv6_is_supported()) {
+                 /* if the kernel lacks ipv6 support setting IFF_UP fails if any ipv6 options are passed */
+                 r = sd_netlink_message_open_container(req, AF_INET6);
+@@ -1416,6 +1417,7 @@ static int link_up(Link *link) {
+                 if (r < 0)
+                         return log_link_error_errno(link, r, "Could not close AF_INET6 container: %m");
+         }
++#endif
+ 
+         r = sd_netlink_message_close_container(req);
+         if (r < 0)
+diff --git a/src/network/networkd-route.c b/src/network/networkd-route.c
+index ed06c21..edb9f86 100644
+--- a/src/network/networkd-route.c
++++ b/src/network/networkd-route.c
+@@ -502,9 +502,11 @@ int route_configure(Route *route, Link *link,
+         if (r < 0)
+                 return log_error_errno(r, "Could not append RTA_PRIORITY attribute: %m");
+ 
++#if 0 // RTA_PREF is not in kernel 3.8
+         r = sd_netlink_message_append_u8(req, RTA_PREF, route->pref);
+         if (r < 0)
+                 return log_error_errno(r, "Could not append RTA_PREF attribute: %m");
++#endif
+ 
+         r = sd_netlink_message_append_u32(req, RTA_OIF, link->ifindex);
+         if (r < 0)
